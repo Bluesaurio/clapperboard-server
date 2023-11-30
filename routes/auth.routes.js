@@ -71,23 +71,26 @@ router.post("/register", async (req,res,next) => {
             email,
             password:hashPassword
         })
-        res.status(201).json("Usuario creado correctamente")
+        const foundNewUser = await User.find({username})
+        const payload = {
+            _id: foundNewUser._id,
+            username: foundNewUser.username,
+            email: foundNewUser.email,
+            role: foundNewUser.role
+        }
+
+        const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {expiresIn: "12h"})
+
+        res.status(201).json({authToken})
         
-        // const foundNewUser = await User.find({username})
+        
 
-        // if (foundNewUser) {
+       
 
-        //     const payload = {
-        //         _id: foundNewUser._id,
-        //         username: foundNewUser.username,
-        //         email: foundNewUser.email,
-        //         role: foundNewUser.role
-        //     }
+           
     
-        //     const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {expiresIn: "12h"})
-    
-        //     res.json({authToken})
-        // }
+      
+        
     } catch (error) {
         next(error)
     }
@@ -142,7 +145,7 @@ router.post("/login", async (req,res,next) => {
 // GET "/api/auth/verify" para decirle al FE si el usuario está activo, y cuál es
 
 router.get("/verify", isTokenValid, (req,res,next) => {
-    console.log(req.payload);
+    // console.log(req.payload);
     res.json({payload:req.payload})
 })
 

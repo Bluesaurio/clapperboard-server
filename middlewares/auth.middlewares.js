@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 
 function isTokenValid(req,res,next) {
 
-    console.log(req.headers);
+    // console.log(req.headers);
 
     try {
         
