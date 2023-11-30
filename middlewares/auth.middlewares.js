@@ -1,26 +1,19 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-function isTokenValid(req,res,next) {
+function isTokenValid(req, res, next) {
+  // console.log(req.headers);
 
-    // console.log(req.headers);
+  try {
+    const token = req.headers.authorization.split(" ")[1];
 
-    try {
-        
-        const token = req.headers.authorization.split(" ")[1]
+    const payload = jwt.verify(token, process.env.TOKEN_SECRET);
 
-        const payload = jwt.verify(token, process.env.TOKEN_SECRET)
+    req.payload = payload;
+  } catch (error) {
+    res.status(401).json("El token no existe o no es válido");
+  }
 
-        req.payload = payload
-
-    } catch (error) {
-        res.status(401).json("El token no existe o no es válido")
-    }
-
-
-
-    next()
-
+  next();
 }
 
-module.exports = isTokenValid
-
+module.exports = isTokenValid;
