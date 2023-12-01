@@ -73,17 +73,17 @@ router.post("/register", async (req, res, next) => {
     const salt = await bcrypt.genSalt(12);
     const hashPassword = await bcrypt.hash(password, salt);
 
-    await User.create({
+    const createdUser = await User.create({
       username,
       email,
       password: hashPassword,
     });
-    const foundNewUser = await User.find({ username });
+    
     const payload = {
-      _id: foundNewUser._id,
-      username: foundNewUser.username,
-      email: foundNewUser.email,
-      role: foundNewUser.role,
+      _id: createdUser._id,
+      username: createdUser.username,
+      email: createdUser.email,
+      role: createdUser.role,
     };
 
     const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
