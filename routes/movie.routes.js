@@ -42,6 +42,24 @@ router.get("/:movieId/details", async (req, res, next) => {
   }
 });
 
-// GET "/movie/:search" => Route to get a specific movie from API
+// GET "/movie/:search/results" => Route to get a specific movie from API
+router.get("/:search/results", async (req, res, next) => {
+  console.log(req.params.search);
+  try {
+    const options = {
+      method: "GET",
+      url: `https://api.themoviedb.org/3/search/movie?query=${req.params.search}&include_adult=true&language=en-US&page=1'`,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+    };
+    const response = await axios.request(options);
+
+    res.json(response.data);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
