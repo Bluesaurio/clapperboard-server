@@ -22,6 +22,25 @@ router.get("/popular", async (req, res, next) => {
 });
 
 // GET "/movie/:movieId" => Route to get details for a specific movie from API
+router.get("/:movieId/details", async (req, res, next) => {
+  console.log(req.params);
+  try {
+    const options = {
+      method: "GET",
+      url: `https://api.themoviedb.org/3/movie/${req.params.movieId}`,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+    };
+
+    const response = await axios.request(options);
+
+    res.json(response.data);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // GET "/movie/:search" => Route to get a specific movie from API
 
