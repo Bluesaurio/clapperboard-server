@@ -6,8 +6,10 @@ const router = require("express").Router();
 // POST "/api/review/:movieId" para crear una review
 
 router.post("/:movieId", isTokenValid, async (req,res,next) => {
-   
-    console.log("AQUI ESTA EL REQ.PAYLOAD", req.payload)
+   console.log("RATING AQUI", req.body)
+    // console.log("AQUI ESTA EL REQ.PAYLOAD", req.payload)
+
+    // Primero buscar reseñas de esa pelicula y de ese User, y si se encuentra una, se envía un error de "no puedes volver a crear una reseña"
     try {
         const response = await Review.create({
             rating: req.body.rating,

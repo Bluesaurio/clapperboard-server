@@ -14,6 +14,7 @@ const reviewSchema = new Schema(
     },
     creator: String,
     filmId: Number
+    
   },
   {
     timestamps: true,
