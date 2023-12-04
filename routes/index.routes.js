@@ -16,4 +16,7 @@ router.use("/upload", uploadRouter);
 const movieRouter = require("./movie.routes");
 router.use("/movie", movieRouter);
 
+const revierRouter = require("./review.routes")
+router.use("/review", revierRouter)
+
 module.exports = router;
