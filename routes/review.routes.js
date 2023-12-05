@@ -42,7 +42,7 @@ router.post("/:movieId", isTokenValid, async (req, res, next) => {
 router.get("/:movieId", async (req, res, next) => {
   try {
     const response = await Review.find({ filmId: req.params.movieId });
-    console.log(response);
+    //console.log(response);
     res.json(response);
   } catch (error) {
     next(error);
@@ -51,15 +51,30 @@ router.get("/:movieId", async (req, res, next) => {
 
 // PUT "/api/review/:reviewId" para editar una review específica
 router.put("/:reviewId", async (req, res, next) => {
+  const { reviewId } = req.params;
+  const { rating, text } = req.body;
+
+  console.log("Donde está esto", req.params, req.body);
+
   try {
-    const response = await Review.findByIdAndUpdate(req.params.reviewId);
+    const response = await Review.findByIdAndUpdate(reviewId, { rating, text });
     console.log(response);
-    res.json(response);
+    res.json("Review updated");
   } catch (error) {
+    console.log(error);
     next(error);
   }
 });
 
 // DELETE "/api/review/:reviewId" para eliminar una review
+router.delete("/:reviewId", async (req, res, next) => {
+  try {
+    await Review.findByIdAndDelete(req.params.reviewId);
+    res.json("Review deleted");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 module.exports = router;
