@@ -1,5 +1,6 @@
 const Review = require("../models/Review.model");
 const isTokenValid = require("../middlewares/auth.middlewares");
+const axios = require("axios");
 
 const router = require("express").Router();
 
@@ -10,12 +11,26 @@ router.post("/:movieId", isTokenValid, async (req, res, next) => {
 
   // TODO ? Primero buscar reseñas de esa pelicula y de ese User, y si se encuentra una, se envía un error de "no puedes volver a crear una reseña"
   try {
+    const options = {
+      method: "GET",
+      url: `https://api.themoviedb.org/3/movie/${req.params.movieId}`,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+    };
+
+    const movieData = await axios.request(options);
+
+    console.log(movieData);
+
     const response = await Review.create({
       rating: req.body.rating,
       text: req.body.text,
       filmId: req.params.movieId,
       creatorId: req.payload._id,
-      creator: req.payload.username,
+      movieTitle: movieData.data.title,
+      picture: movieData.data.poster_path,
     });
     res.json(response);
   } catch (error) {
