@@ -8,7 +8,7 @@ router.post("/:movieId", isTokenValid, async (req, res, next) => {
   console.log("RATING AQUI", req.body);
   // console.log("AQUI ESTA EL REQ.PAYLOAD", req.payload)
 
-  // Primero buscar reseñas de esa pelicula y de ese User, y si se encuentra una, se envía un error de "no puedes volver a crear una reseña"
+  // TODO ? Primero buscar reseñas de esa pelicula y de ese User, y si se encuentra una, se envía un error de "no puedes volver a crear una reseña"
   try {
     const response = await Review.create({
       rating: req.body.rating,
@@ -35,6 +35,15 @@ router.get("/:movieId", async (req, res, next) => {
 });
 
 // PUT "/api/review/:reviewId" para editar una review específica
+router.put("/:reviewId", async (req, res, next) => {
+  try {
+    const response = await Review.findByIdAndUpdate(req.params.reviewId);
+    console.log(response);
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // DELETE "/api/review/:reviewId" para eliminar una review
 

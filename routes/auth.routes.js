@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const isTokenValid = require("../middlewares/auth.middlewares");
 
 // POST "/api/auth/register" para crear nuevo usuario
-
 router.post("/register", async (req, res, next) => {
   // console.log(req.body);
   const { username, email, password } = req.body;
@@ -78,7 +77,7 @@ router.post("/register", async (req, res, next) => {
       email,
       password: hashPassword,
     });
-    
+
     const payload = {
       _id: createdUser._id,
       username: createdUser.username,
