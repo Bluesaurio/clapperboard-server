@@ -9,7 +9,8 @@ const listSchema = new Schema(
     description: String,
     category: {
       type: String,
-      enum: ["favorite", "watchlist", "custom"],
+      enum: ["Favorites", "Watchlist", "Custom"],
+      required: true,
     },
     listPic: String,
     creatorId: {
