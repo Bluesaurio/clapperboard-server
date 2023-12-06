@@ -129,5 +129,13 @@ router.put("/:userId/lists/:listId", async (req, res, next) => {
 });
 
 // "DELETE" "api/profile/:userId/lists/:listId" => Delete a specific list
+router.delete("/:userId/lists/:listId", async (req, res, next) => {
+  try {
+    await List.findByIdAndDelete(req.params.listId);
+    res.json("List deleted");
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
