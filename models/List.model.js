@@ -1,6 +1,6 @@
-const { Schema, model, mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
-const listSchema = new Schema(
+const listSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -24,6 +24,6 @@ const listSchema = new Schema(
   }
 );
 
-const List = model("List", listSchema);
+const List = mongoose.model("List", listSchema);
 
 module.exports = List;

@@ -41,8 +41,8 @@ router.post("/:movieId", isTokenValid, async (req, res, next) => {
 // GET "/api/review/:movieId" para conseguir todas las reviews de una película
 router.get("/:movieId", async (req, res, next) => {
   try {
-    const response = await Review.find({ filmId: req.params.movieId });
-    //console.log(response);
+    const response = await Review.find({ filmId: req.params.movieId }).populate("creatorId")
+    console.log("ESTAS SON TODAS LAS REVIEWS", response);
     res.json(response);
   } catch (error) {
     next(error);
@@ -53,7 +53,7 @@ router.get("/:movieId", async (req, res, next) => {
 router.get("/:movieId/:userId", async (req,res,next) => {
   try {
     const response = await Review.find({filmId: req.params.movieId, creatorId:req.params.userId })
-    console.log("Se ha encontrado esta review:", response);
+    // console.log("Se ha encontrado esta review:", response);
     if (response.length !== 0) {
       res.json(response)
     } else {
