@@ -49,6 +49,17 @@ router.get("/:movieId", async (req, res, next) => {
   }
 });
 
+// GET "api/review/:movieId/:userId" para buscar una review con la ID del usuario y saber si ya ha publicado una
+router.get("/:movieId/:userId", async (req,res,next) => {
+  try {
+    
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+
 // PUT "/api/review/:reviewId" para editar una review específica
 router.put("/:reviewId", async (req, res, next) => {
   const { reviewId } = req.params;
@@ -58,6 +69,7 @@ router.put("/:reviewId", async (req, res, next) => {
 
   try {
     const response = await Review.findByIdAndUpdate(reviewId, { rating, text });
+   
     console.log(response);
     res.json("Review updated");
   } catch (error) {
