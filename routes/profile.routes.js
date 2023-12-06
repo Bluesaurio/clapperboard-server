@@ -86,7 +86,7 @@ router.post("/:userId/lists", async (req, res, next) => {
   }
 });
 
-// "GET" "api/list/:listId" => Get details of a specific list
+// "GET" "api/profile/:userId/lists => Get lists created by user
 router.get("/:userId/lists", async (req, res, next) => {
   try {
     const response = await List.find({ creatorId: req.params.userId });
@@ -97,8 +97,37 @@ router.get("/:userId/lists", async (req, res, next) => {
   }
 });
 
-// "PUT" "api/list/:listId" => Edit a specific list
+// "GET" "api/profile/:userId/lists/:listId" => Get details of a specific list
+router.get("/:userId/lists/:listId", async (req, res, next) => {
+  try {
+    const response = await List.findOne({
+      _id: req.params.listId,
+      creatorId: req.params.userId,
+    });
+    console.log(response);
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
 
-// "DELETE" "api/list/:listId" => Delete a specific list
+// "PUT" "api/profile/:userId/lists/:listId" => Edit a specific list
+router.put("/:userId/lists/:listId", async (req, res, next) => {
+  const { name, description } = req.body;
+  const { listId } = req.params;
+
+  try {
+    const response = await List.findByIdAndUpdate(listId, {
+      name,
+      description,
+    });
+    console.log(response);
+    res.json("List updated");
+  } catch (error) {
+    next(error);
+  }
+});
+
+// "DELETE" "api/profile/:userId/lists/:listId" => Delete a specific list
 
 module.exports = router;
