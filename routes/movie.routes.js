@@ -48,7 +48,7 @@ router.get("/:search/results", async (req, res, next) => {
   try {
     const options = {
       method: "GET",
-      url: `https://api.themoviedb.org/3/search/movie?query=${req.params.search}&include_adult=true&language=en-US&page=1'`,
+      url: `https://api.themoviedb.org/3/search/movie?query=${req.params.search}&include_adult=true&language=en-US&page=1`,
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${process.env.API_TOKEN}`,
