@@ -138,4 +138,32 @@ router.delete("/:userId/lists/:listId", async (req, res, next) => {
   }
 });
 
+// "PATCH" "api/profile/lists/:listId/:movieId" => Add or remove films from a specific list
+router.patch("lists/:listId/:movieId", async (req, res, next) => {
+  const { userId, listId, movieId } = req.params;
+  try {
+    const myListResponse = await List.findById(listId);
+
+    const options = {
+      method: "GET",
+      url: `https://api.themoviedb.org/3/movie/${movieId}`,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+    };
+    const response = await axios.request(options);
+    const { title, poster_path } = response.data;
+    const movieToAdd = {
+      title,
+      poster_path,
+    };
+    myListResponse.filmId.push(movieId);
+    myListResponse.filmDetails.push(movieToAdd);
+    res.json("Movie added to list");
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

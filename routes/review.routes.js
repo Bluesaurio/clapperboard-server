@@ -20,19 +20,19 @@ router.post("/:movieId", isTokenValid, async (req, res, next) => {
       },
     };
 
-    const movieData = await axios.request(options);
+    const movieResponse = await axios.request(options);
 
-    console.log(movieData);
+    console.log(movieResponse);
 
-    const response = await Review.create({
+    const reviewResponse = await Review.create({
       rating: req.body.rating,
       text: req.body.text,
       filmId: req.params.movieId,
       creatorId: req.payload._id,
-      movieTitle: movieData.data.title,
-      picture: movieData.data.poster_path,
+      movieTitle: movieResponse.data.title,
+      picture: movieResponse.data.poster_path,
     });
-    res.json(response);
+    res.json(reviewResponse);
   } catch (error) {
     next(error);
   }
@@ -41,7 +41,9 @@ router.post("/:movieId", isTokenValid, async (req, res, next) => {
 // GET "/api/review/:movieId" para conseguir todas las reviews de una película
 router.get("/:movieId", async (req, res, next) => {
   try {
-    const response = await Review.find({ filmId: req.params.movieId }).populate("creatorId")
+    const response = await Review.find({ filmId: req.params.movieId }).populate(
+      "creatorId"
+    );
     console.log("ESTAS SON TODAS LAS REVIEWS", response);
     res.json(response);
   } catch (error) {
@@ -50,21 +52,22 @@ router.get("/:movieId", async (req, res, next) => {
 });
 
 // GET "api/review/:movieId/:userId" para buscar una review con la ID del usuario y saber si ya ha publicado una
-router.get("/:movieId/:userId", async (req,res,next) => {
+router.get("/:movieId/:userId", async (req, res, next) => {
   try {
-    const response = await Review.find({filmId: req.params.movieId, creatorId:req.params.userId })
+    const response = await Review.find({
+      filmId: req.params.movieId,
+      creatorId: req.params.userId,
+    });
     // console.log("Se ha encontrado esta review:", response);
     if (response.length !== 0) {
-      res.json(response)
+      res.json(response);
     } else {
-      res.json(null)
+      res.json(null);
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
-})
-
-
+});
 
 // PUT "/api/review/:reviewId" para editar una review específica
 router.put("/:reviewId", async (req, res, next) => {
@@ -75,7 +78,7 @@ router.put("/:reviewId", async (req, res, next) => {
 
   try {
     const response = await Review.findByIdAndUpdate(reviewId, { rating, text });
-   
+
     console.log(response);
     res.json("Review updated");
   } catch (error) {

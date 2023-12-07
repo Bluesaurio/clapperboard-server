@@ -17,7 +17,8 @@ const listSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    filmId: Number,
+    filmId: [Number],
+    filmDetails: [],
   },
   {
     timestamps: true,
