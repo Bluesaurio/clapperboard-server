@@ -4,6 +4,7 @@ const uploader = require("../middlewares/cloudinary.config.js");
 const isTokenValid = require("../middlewares/auth.middlewares");
 const Review = require("../models/Review.model.js");
 const List = require("../models/List.model.js");
+const axios = require("axios");
 
 // GET "/api/profile/:userId" para conseguir data sobre el usuario
 router.get("/:userId", async (req, res, next) => {
@@ -70,7 +71,7 @@ router.get("/:userId/reviews", async (req, res, next) => {
 });
 
 // "POST" "api/profile/:userId/list" => Create a new movies list
-router.post("/:userId/lists", async (req, res, next) => {
+router.post("/lists", isTokenValid, async (req, res, next) => {
   const { name, description, category } = req.body;
 
   try {
@@ -78,7 +79,7 @@ router.post("/:userId/lists", async (req, res, next) => {
       name,
       description,
       category,
-      creatorId: req.params.userId,
+      creatorId: req.payload._id,
     });
     res.json(response);
   } catch (error) {
@@ -139,10 +140,30 @@ router.delete("/:userId/lists/:listId", async (req, res, next) => {
 });
 
 // "PATCH" "api/profile/lists/:listId/:movieId" => Add or remove films from a specific list
-router.patch("lists/:listId/:movieId", async (req, res, next) => {
+router.patch("/lists/:listId/:movieId", async (req, res, next) => {
   const { listId, movieId } = req.params;
   try {
-    await List.findByIdAndUpdate(listId, {$push: {filmId: movieId}});
+    const options = {
+      method: "GET",
+      url: `https://api.themoviedb.org/3/movie/${req.params.movieId}`,
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+    };
+
+    const response = await axios.request(options);
+    const movieDetails = {
+      apiId: response.data.id,
+      title: response.data.title,
+      image: response.data.poster_path,
+    };
+
+    await List.findByIdAndUpdate(listId, {
+      $addToSet: {
+        filmDetails: movieDetails,
+      },
+    });
 
     res.json("Movie added to list");
   } catch (error) {

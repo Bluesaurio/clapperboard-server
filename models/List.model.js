@@ -17,8 +17,11 @@ const listSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    filmId: [Number],
-    filmDetails: [],
+    filmDetails: {
+      apiId: Number,
+      title: String,
+      image: String,
+    },
   },
   {
     timestamps: true,
