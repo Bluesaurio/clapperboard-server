@@ -54,16 +54,14 @@ router.get("/:movieId", async (req, res, next) => {
 // GET "api/review/:movieId/:userId" para buscar una review con la ID del usuario y saber si ya ha publicado una
 router.get("/:movieId/:userId", async (req, res, next) => {
   try {
-    const response = await Review.find({
+    const response = await Review.findOne({
       filmId: req.params.movieId,
       creatorId: req.params.userId,
     });
     // console.log("Se ha encontrado esta review:", response);
-    if (response.length !== 0) {
+   
       res.json(response);
-    } else {
-      res.json(null);
-    }
+   
   } catch (error) {
     next(error);
   }
