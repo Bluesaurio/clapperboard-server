@@ -139,7 +139,7 @@ router.delete("/:userId/lists/:listId", async (req, res, next) => {
   }
 });
 
-// "PATCH" "api/profile/lists/:listId/:movieId" => Add or remove films from a specific list
+// "PATCH" "api/profile/lists/:listId/:movieId" => Add films from a specific list
 router.patch("/lists/:listId/:movieId", async (req, res, next) => {
   const { listId, movieId } = req.params;
   try {
@@ -171,4 +171,26 @@ router.patch("/lists/:listId/:movieId", async (req, res, next) => {
   }
 });
 
+// "PATCH" "api/profile/lists/:listId/:movieId/delete" => Remove films from a specific list
+router.patch("/lists/:listId/:movieId/delete", async (req, res, next) => {
+  const { listId, movieId } = req.params;
+  try {
+   
+    // const movieDetails = {
+    //   apiId: movieId,
+    //   title,
+    //   image,
+    // };
+
+    await List.findByIdAndUpdate(listId, {
+      $pull: {
+        filmDetails: {apiId: movieId},
+      },
+    });
+
+    res.json("Movie added to list");
+  } catch (error) {
+    next(error);
+  }
+});
 module.exports = router;
