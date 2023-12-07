@@ -18,7 +18,6 @@ const listSchema = new mongoose.Schema(
       ref: "User",
     },
     filmId: [Number],
-    filmDetails: [],
   },
   {
     timestamps: true,
