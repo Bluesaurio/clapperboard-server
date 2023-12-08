@@ -101,6 +101,8 @@ List model
 
 [Raúl Garrigós](https://github.com/raulgarrigos)
 
+[Adrián Siquier](https://github.com/Bluesaurio)
+
 ### Project
 
 [https://github.com/raulgarrigos/clapperboard-client](https://github.com/raulgarrigos/clapperboard-client)
