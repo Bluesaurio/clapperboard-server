@@ -6,7 +6,7 @@ const isTokenValid = require("../middlewares/auth.middlewares");
 
 // POST "/api/auth/register" para crear nuevo usuario
 router.post("/register", async (req, res, next) => {
-  // console.log(req.body);
+  
   const { username, email, password } = req.body;
 
   // validación campos vacíos:
@@ -14,7 +14,7 @@ router.post("/register", async (req, res, next) => {
   if (!username || !email || !password) {
     res
       .status(400)
-      .json({ errorMessage: "Todos los campos deben estar llenos" });
+      .json({ errorMessage: "All fields must be filled" });
     return;
   }
 
@@ -24,7 +24,7 @@ router.post("/register", async (req, res, next) => {
   if (passwordRegex.test(password) === false) {
     res.status(400).json({
       errorMessage:
-        "La contraseña no es suficientemente segura. Debe tener como mínimo 8 carácteres, mayúsculas, minúsculas y un número.",
+        "The password is not secure enough. It must have at least 8 characters, capital letters and a number",
     });
     return;
   }
@@ -36,7 +36,7 @@ router.post("/register", async (req, res, next) => {
 
   if (emailRegex.test(email) === false) {
     res.status(400).json({
-      errorMessage: "El formato del correo electrónico no es correcto",
+      errorMessage: "Email format is not correct",
     });
     return;
   }
@@ -45,7 +45,7 @@ router.post("/register", async (req, res, next) => {
 
   if (username.length < 6) {
     res.status(400).json({
-      errorMessage: "El nombre de usuario debe tener mínimo 6 carácteres",
+      errorMessage: "Username must have at least 6 characters",
     });
   }
 
@@ -57,14 +57,14 @@ router.post("/register", async (req, res, next) => {
 
     if (foundUser) {
       res.status(400).json({
-        errorMessage: "El nombre de usuario introducido ya está en uso.",
+        errorMessage: "That username is already in use",
       });
     }
 
     if (foundEmail) {
       res
         .status(400)
-        .json({ errorMessage: "El email introducido ya está en uso" });
+        .json({ errorMessage: "That email is already in use" });
     }
 
     // Cifrar contraseña
@@ -98,14 +98,14 @@ router.post("/register", async (req, res, next) => {
 // POST "/api/auth/login" para crear un nuevo token de usuario
 
 router.post("/login", async (req, res, next) => {
-  // console.log(req.body);
+  
   const { username, password } = req.body;
 
   // verificación de campos llenos
   if (!username || !password) {
     res
       .status(400)
-      .json({ errorMessage: "Todos los campos deben estar llenos" });
+      .json({ errorMessage: "All fields must be filled" });
     return;
   }
 
@@ -113,15 +113,15 @@ router.post("/login", async (req, res, next) => {
     // validación usuario existente
     const foundUser = await User.findOne({ username });
     if (!foundUser) {
-      res.status(400).json({ errorMessage: "Usuario no registrado" });
+      res.status(400).json({ errorMessage: "User not registered" });
       return;
     }
-    // console.log(foundUser);
+    
     // validación contraseña correcta
     const isPasswordValid = await bcrypt.compare(password, foundUser.password);
 
     if (!isPasswordValid) {
-      res.status(400).json({ errorMessage: "Contraseña incorrecta" });
+      res.status(400).json({ errorMessage: "Wrong password" });
       return;
     }
 
@@ -145,7 +145,7 @@ router.post("/login", async (req, res, next) => {
 // GET "/api/auth/verify" para decirle al FE si el usuario está activo, y cuál es
 
 router.get("/verify", isTokenValid, (req, res, next) => {
-  // console.log(req.payload);
+  
   res.json({ payload: req.payload });
 });
 

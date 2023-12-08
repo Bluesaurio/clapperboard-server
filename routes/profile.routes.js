@@ -10,7 +10,7 @@ const axios = require("axios");
 router.get("/:userId", async (req, res, next) => {
   try {
     const response = await User.findById(req.params.userId);
-    console.log(response);
+    
     res.json(response);
   } catch (error) {
     next(error);
@@ -20,7 +20,7 @@ router.get("/:userId", async (req, res, next) => {
 // PUT "/api/profile" para editar data del usuario en la edición del perfil
 router.put("/", isTokenValid, async (req, res, next) => {
   const { firstName, lastName, location, bio, pronouns } = req.body;
-  console.log(req.payload);
+  
   try {
     await User.findByIdAndUpdate(req.payload._id, {
       firstName,
@@ -44,7 +44,7 @@ router.patch(
     if (!req.file) {
       res
         .status(400)
-        .json({ errorMessage: "Ha habido un error con la imagen" });
+        .json({ errorMessage: "There has been an error with your image" });
       return;
     }
 
@@ -63,7 +63,7 @@ router.patch(
 router.get("/:userId/reviews", async (req, res, next) => {
   try {
     const response = await Review.find({ creatorId: req.params.userId });
-    console.log(response);
+    
     res.json(response);
   } catch (error) {
     next(error);
@@ -91,7 +91,7 @@ router.post("/lists", isTokenValid, async (req, res, next) => {
 router.get("/:userId/lists", async (req, res, next) => {
   try {
     const response = await List.find({ creatorId: req.params.userId });
-    console.log(response);
+    
     res.json(response);
   } catch (error) {
     next(error);
@@ -105,7 +105,7 @@ router.get("/:userId/lists/:listId", async (req, res, next) => {
       _id: req.params.listId,
       creatorId: req.params.userId,
     });
-    console.log(response);
+    
     res.json(response);
   } catch (error) {
     next(error);
@@ -122,7 +122,7 @@ router.put("/:userId/lists/:listId", async (req, res, next) => {
       name,
       description,
     });
-    console.log(response);
+    
     res.json("List updated");
   } catch (error) {
     next(error);
@@ -141,7 +141,7 @@ router.delete("/:userId/lists/:listId", async (req, res, next) => {
 
 // "PATCH" "api/profile/lists/:listId/:movieId" => Add films from a specific list
 router.patch("/lists/:listId/:movieId", async (req, res, next) => {
-  const { listId, movieId } = req.params;
+  const { listId } = req.params;
   try {
     const options = {
       method: "GET",
@@ -158,6 +158,8 @@ router.patch("/lists/:listId/:movieId", async (req, res, next) => {
       title: response.data.title,
       image: response.data.poster_path,
     };
+
+    // $addToSet como método de Mongo para añadir un componente a una array, si éste no está repetido (no duplica)
 
     await List.findByIdAndUpdate(listId, {
       $addToSet: {
@@ -176,11 +178,7 @@ router.patch("/lists/:listId/:movieId/delete", async (req, res, next) => {
   const { listId, movieId } = req.params;
   try {
    
-    // const movieDetails = {
-    //   apiId: movieId,
-    //   title,
-    //   image,
-    // };
+    // $pull como método de Mongo para borrar un archivo
 
     await List.findByIdAndUpdate(listId, {
       $pull: {

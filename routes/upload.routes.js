@@ -5,7 +5,7 @@ const uploader = require("../middlewares/cloudinary.config.js");
 
 router.post("/", uploader.single("image"), (req, res, next) => {
   if (!req.file) {
-    res.status(400).json({ errorMessage: "Ha habido un error con la imagen" });
+    res.status(400).json({ errorMessage: "There has been an error with your image" });
     return;
   }
   res.json({ imageUrl: req.file.path });

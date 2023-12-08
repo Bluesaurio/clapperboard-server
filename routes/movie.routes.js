@@ -23,7 +23,7 @@ router.get("/popular", async (req, res, next) => {
 
 // GET "/movie/:movieId" => Route to get details for a specific movie from API
 router.get("/:movieId/details", async (req, res, next) => {
-  console.log(req.params);
+  
   try {
     const options = {
       method: "GET",
@@ -44,7 +44,7 @@ router.get("/:movieId/details", async (req, res, next) => {
 
 // GET "/movie/:search/results" => Route to get a specific movie from API
 router.get("/:search/results", async (req, res, next) => {
-  console.log(req.params.search);
+
   try {
     const options = {
       method: "GET",

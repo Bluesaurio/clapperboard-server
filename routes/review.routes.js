@@ -1,15 +1,11 @@
 const Review = require("../models/Review.model");
 const isTokenValid = require("../middlewares/auth.middlewares");
 const axios = require("axios");
-
 const router = require("express").Router();
 
 // POST "/api/review/:movieId" para crear una review
 router.post("/:movieId", isTokenValid, async (req, res, next) => {
-  console.log("RATING AQUI", req.body);
-  // console.log("AQUI ESTA EL REQ.PAYLOAD", req.payload)
 
-  // TODO ? Primero buscar reseñas de esa pelicula y de ese User, y si se encuentra una, se envía un error de "no puedes volver a crear una reseña"
   try {
     const options = {
       method: "GET",
@@ -21,9 +17,6 @@ router.post("/:movieId", isTokenValid, async (req, res, next) => {
     };
 
     const movieResponse = await axios.request(options);
-
-    console.log(movieResponse);
-
     const reviewResponse = await Review.create({
       rating: req.body.rating,
       text: req.body.text,
@@ -44,7 +37,6 @@ router.get("/:movieId", async (req, res, next) => {
     const response = await Review.find({ filmId: req.params.movieId }).populate(
       "creatorId"
     );
-    console.log("ESTAS SON TODAS LAS REVIEWS", response);
     res.json(response);
   } catch (error) {
     next(error);
@@ -58,7 +50,6 @@ router.get("/:movieId/:userId", async (req, res, next) => {
       filmId: req.params.movieId,
       creatorId: req.params.userId,
     });
-    // console.log("Se ha encontrado esta review:", response);
    
       res.json(response);
    
@@ -71,16 +62,10 @@ router.get("/:movieId/:userId", async (req, res, next) => {
 router.put("/:reviewId", async (req, res, next) => {
   const { reviewId } = req.params;
   const { rating, text } = req.body;
-
-  console.log("Donde está esto", req.params, req.body);
-
   try {
     const response = await Review.findByIdAndUpdate(reviewId, { rating, text });
-
-    console.log(response);
     res.json("Review updated");
   } catch (error) {
-    console.log(error);
     next(error);
   }
 });
@@ -91,7 +76,6 @@ router.delete("/:reviewId", async (req, res, next) => {
     await Review.findByIdAndDelete(req.params.reviewId);
     res.json("Review deleted");
   } catch (error) {
-    console.log(error);
     next(error);
   }
 });
