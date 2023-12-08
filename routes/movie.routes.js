@@ -21,7 +21,7 @@ router.get("/popular", async (req, res, next) => {
   }
 });
 
-// GET "/movie/:movieId" => Route to get details for a specific movie from API
+// GET "/movie/:movieId/details" => Route to get details for a specific movie from API
 router.get("/:movieId/details", async (req, res, next) => {
   
   try {

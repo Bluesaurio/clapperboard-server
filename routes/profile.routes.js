@@ -70,7 +70,7 @@ router.get("/:userId/reviews", async (req, res, next) => {
   }
 });
 
-// "POST" "api/profile/:userId/list" => Create a new movies list
+// "POST" "api/profile/:userId/lists" => Create a new movies list
 router.post("/lists", isTokenValid, async (req, res, next) => {
   const { name, description, category } = req.body;
 
